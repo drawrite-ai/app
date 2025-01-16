@@ -1,15 +1,8 @@
-import fetch from 'node-fetch';
+import fetch, {HeadersInit} from 'node-fetch';
 
 enum GrokModels {
     GROK_2 = 'grok-2',
     GROK_2_MINI = 'grok-2-mini',
-}
-
-interface Headers {
-    'X-Csrf-Token': string;
-    Authorization: string;
-    'Content-Type': string;
-    Cookie: string;
 }
 
 interface AddResponsePayload {
@@ -39,6 +32,7 @@ interface Result {
     requestEntities?: RequestEntities;
     responseEntities?: ResponseEntities;
 }
+
 interface StreamResponseChunk {
     result?: Result;
 }
@@ -47,14 +41,14 @@ class Grokit {
     private BEARER_TOKEN =
         'AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs%3D1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA';
 
-    private authToken: string | undefined;
-    private csrfToken: string | undefined;
+    private authToken: string;
+    private csrfToken: string;
     private cookie: string;
-    private headers: Headers;
+    private headers: HeadersInit;
 
     constructor(authToken?: string, csrfToken?: string) {
-        this.authToken = authToken || process.env.X_AUTH_TOKEN;
-        this.csrfToken = csrfToken || process.env.X_CSRF_TOKEN;
+        this.authToken = authToken || process.env.X_AUTH_TOKEN as string;
+        this.csrfToken = csrfToken || process.env.X_CSRF_TOKEN as string;
 
         if (!this.authToken || !this.csrfToken) {
             throw new Error('X_AUTH_TOKEN and X_CSRF_TOKEN must be provided');
@@ -68,7 +62,7 @@ class Grokit {
         return `auth_token=${this.authToken}; ct0=${this.csrfToken};`;
     }
 
-    private createHeaders(): Headers {
+    private createHeaders(): HeadersInit {
         return {
             'X-Csrf-Token': this.csrfToken as string,
             Authorization: `Bearer ${this.BEARER_TOKEN}`,
@@ -77,18 +71,20 @@ class Grokit {
         };
     }
 
-    async createConversation(): Promise<string | null> {
+    async createConversation(): Promise<string | undefined> {
         const url = 'https://x.com/i/api/graphql/UBIjqHqsA5aixuibXTBheQ/CreateGrokConversation';
         const payload = {
             variables: {},
             queryId: 'UBIjqHqsA5aixuibXTBheQ',
         };
 
-        const response = await this.makeRequest(url, payload);
+        const response = await this.makeRequest(url, payload) as {
+            data: { create_grok_conversation: { conversation_id: string } }
+        };
         if (response && response.data) {
             return response.data.create_grok_conversation.conversation_id;
         }
-        return null;
+        return undefined;
     }
 
     async generate(
@@ -142,13 +138,14 @@ class Grokit {
     }
 
     private async ensureConversationId(conversationId?: string): Promise<string> {
-        if (!conversationId) {
-            conversationId = await this.createConversation();
-            if (!conversationId) {
+        let id = conversationId;
+        if (!id) {
+            id = await this.createConversation();
+            if (!id) {
                 throw new Error('Failed to create conversation');
             }
         }
-        return conversationId;
+        return id;
     }
 
     private async streamResponse(
@@ -159,7 +156,7 @@ class Grokit {
     ): Promise<string[]> {
         const url = 'https://api.x.com/2/grok/add_response.json';
         const payload: AddResponsePayload = {
-            responses: [{ message, sender: 1 }],
+            responses: [{message, sender: 1}],
             systemPromptName,
             grokModelOptionId: typeof modelId === 'string' ? modelId : modelId,
             conversationId,
@@ -194,7 +191,8 @@ class Grokit {
         return chunks;
     }
 
-    private async makeRequest(url: string, payload: object): Promise<any> {
+    private async makeRequest(url: string, payload: object): Promise<unknown | Error> {
+
         const response = await fetch(url, {
             method: 'POST',
             headers: this.headers,
@@ -209,4 +207,4 @@ class Grokit {
     }
 }
 
-export { Grokit, GrokModels };
+export {Grokit, GrokModels};

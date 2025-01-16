@@ -1,4 +1,4 @@
-import {Github,X,Telegram} from "@/public/icons";
+import {Github, Telegram, X} from "@/public/icons";
 import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {BookText} from "lucide-react";
@@ -16,17 +16,17 @@ export function Links() {
             </Button>
             <Separator orientation="vertical"/>
             <Button variant="ghost" size="icon" className="p-1" asChild={true}>
-                <Link href="https://x.com/drawrite_ai">
+                <Link href="https://x.com/drawrite_ai" target="_blank">
                     <Image src={X} alt={"X"} className="w-full h-full rounded-xl"/>
                 </Link>
             </Button>
             <Button variant="ghost" size="icon" className="p-1" asChild={true}>
-                <Link href="https://t.co/YQbv50T0un">
+                <Link href="https://t.co/YQbv50T0un" target="_blank">
                     <Image src={Telegram} alt={"Telegram"} className="w-full h-full rounded-xl"/>
                 </Link>
             </Button>
             <Button variant="ghost" size="icon" className="p-1" asChild={true}>
-                <Link href="">
+                <Link href="https://github.com/drawrite-ai/app" target="_blank">
                     <Image src={Github} alt={"Github"} className="w-full h-full rounded-xl"/>
                 </Link>
             </Button>

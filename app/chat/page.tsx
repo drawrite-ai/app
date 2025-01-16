@@ -68,10 +68,10 @@ export default function ChatPage() {
         }
     };
 
-    const [imagePrompt, setImagePrompt] = useState('');
-    const [imagesPrompts, setImagesPrompts] = useState<JSX.Element[]>([]);
+    /*const [imagePrompt, setImagePrompt] = useState('');
+    const [imagesPrompts, setImagesPrompts] = useState<JSX.Element[]>([]);*/
 
-    const handleImage = async () => {
+    /*const handleImage = async () => {
         setImagesPrompts(prevMessages => [
             ...prevMessages,
             <UserMessage key={prevMessages.length} message={imagePrompt} />,
@@ -99,12 +99,12 @@ export default function ChatPage() {
         } else {
             alert(data.error);
         }
-    };
+    };*/
 
     return (
         <div className="flex flex-col gap-4">
             <Tabs defaultValue="prompt" className="mx-auto">
-                <TabsList className="grid w-[400px] grid-cols-2 mx-auto">
+                <TabsList className="grid md:w-[400px] w-full grid-cols-2 mx-auto">
                     <TabsTrigger value="prompt">Prompt</TabsTrigger>
                     <TooltipProvider>
                         <Tooltip >
@@ -172,7 +172,7 @@ export default function ChatPage() {
                     </div>}
                 </TabsContent>
                 <TabsContent value="image">
-                    {imagesPrompts.length !== 0 && (
+                    {/*{imagesPrompts.length !== 0 && (
                         <ScrollArea className="h-[50vh] border rounded-lg overflow-auto">
                             <div className="p-4">
                                 {imagesPrompts.map((message: JSX.Element, index: number) => (
@@ -201,7 +201,7 @@ export default function ChatPage() {
                         >
                             <Send className="stroke-black group-hover:stroke-white transition"/>
                         </Button>
-                    </div>
+                    </div>*/}
                 </TabsContent>
             </Tabs>
         </div>

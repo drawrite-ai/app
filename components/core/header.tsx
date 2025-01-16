@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 
-import logo from "@/public/logo.png"
+import Preview from "@/public/preview.png"
 import {TrendingUp} from  "lucide-react"
 
 import React from "react";
@@ -10,13 +10,13 @@ import React from "react";
 
 export function Header() {
     return (
-        <div className="h-[50vh] p-1 flex box-rotate rounded-xl">
-            <div className="flex lg:grid grid-cols-2 gap-4 p-4 items-center bg-background rounded-xl overflow-hidden">
+        <div className="lg:h-[50vh] h-fit p-1 flex box-rotate rounded-xl">
+            <div className="flex xl:grid grid-cols-2 gap-4 p-4 items-center bg-background rounded-xl ">
                 <div className="flex flex-col justify-center gap-8">
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-4xl font-bold text-nowrap">Elevating DeFi with AI Text & Visuals</h1>
-                        <div className="p-1 rounded-xl">
-                            <TrendingUp size={32} className="stroke-green-400"/>
+                    <div className="flex items-start gap-3">
+                        <h1 className="text-4xl font-bold">Elevating DeFi with AI Text & Visuals</h1>
+                        <div className="p-1 rounded-xl border">
+                            <TrendingUp size={48} className="stroke-green-400 p-1"/>
                         </div>
                     </div>
                     <div className="text-lg text-muted-foreground">
@@ -30,8 +30,8 @@ export function Header() {
                         analysis.
                     </div>
                 </div>
-                <Image src={logo} alt="Drawrite Preview" height={400} width={400}
-                       className="lg:block hidden rounded-xl overflow-hidden ml-auto"/>
+                <Image src={Preview} alt="Drawrite Preview"
+                       className="xl:block hidden rounded-xl overflow-hidden ml-auto h-full w-auto"/>
             </div>
         </div>
     )
